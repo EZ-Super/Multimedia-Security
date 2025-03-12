@@ -1,0 +1,6 @@
+[package]
+name = "HW_1_Spatial_Domain_Watermark_Embedding_Implementation"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
