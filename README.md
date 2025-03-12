@@ -4,5 +4,5 @@
 * A Study on Multimedia Security: Watermarking and Information Hiding
 
 ## Author 
-* Yang Chun Peng
+* Yang Chun Peng (Student ID: 41043229)
 
