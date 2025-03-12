@@ -4,5 +4,5 @@
 * A Study on Multimedia Security: Watermarking and Information Hiding
 
 ## Author 
-* 楊峻朋
+* Yang Chun Peng
 
