@@ -4,18 +4,21 @@ use image::{open, GenericImageView};
 
 use crate::modules::point::Point;
 
+use super::point;
 
+#[allow(dead_code)]
 pub struct BaseImage{
     path : String,
     width : u32,
     height : u32,
-    pixel: HashMap<Point,u8>,
+    pixel: HashMap<Point,point::RGPPixel>,
     color_type:image::ColorType,
     dyamic_image: image::DynamicImage,
 }
 
 impl BaseImage{
     pub fn new(path:String,color_type:image::ColorType)->BaseImage{
+        println!("path:{}",path);
         let image = match open(&path){
             Ok(image) => image,
             Err(error) => panic!("Error loading image: {}", error)
@@ -35,6 +38,22 @@ impl BaseImage{
         for x in 0..self.width{
             for y in 0..self.height{
                 let [r,g,b,a] = self.dyamic_image.get_pixel(x,y).0;
+                //println!("r:{} g:{} b:{} a:{}",r,g,b,a);
+
+                let point = Point{x,y};
+                let pixel = point::RGPPixel::new(r,g,b,a);
+                self.pixel.insert(point,pixel );
+            }
+        }
+    }
+    #[allow(unused)]
+    pub fn show_pixel(&self){
+        for x in 0..self.width{
+            for y in 0..self.height{
+                let point = Point{x,y};
+                let pixel = self.pixel.get(&point).unwrap();
+
+                let [r,g,b,a] = pixel.get_rgb();
                 println!("r:{} g:{} b:{} a:{}",r,g,b,a);
             }
         }
