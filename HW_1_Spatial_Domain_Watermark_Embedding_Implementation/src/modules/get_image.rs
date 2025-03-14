@@ -9,9 +9,9 @@ use super::point;
 #[allow(dead_code)]
 pub struct BaseImage{
     path : String,
-    width : u32,
-    height : u32,
-    pixel: HashMap<Point,point::RGPPixel>,
+    pub width : u32,
+    pub height : u32,
+    pub pixel: HashMap<Point,point::RGPPixel>,
     color_type:image::ColorType,
     dyamic_image: image::DynamicImage,
 }
