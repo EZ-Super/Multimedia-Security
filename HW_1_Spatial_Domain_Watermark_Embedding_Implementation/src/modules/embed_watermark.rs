@@ -25,7 +25,7 @@ pub struct HostImage{
 }
 
 impl Watermark{
-    fn new(base_image:&BaseImage)->Watermark{
+    pub fn new(base_image:&BaseImage)->Watermark{
         let clone_base_image = base_image.clone();
         let width = clone_base_image.width;
         let height = clone_base_image.height;
@@ -48,7 +48,7 @@ impl HostImage{
             embed_height: 0 as u32,
         }
     }
-    pub fn embed_image(&self,watermark: Watermark,x_point:u32,y_point:u32,watermark_x_number:u32,watermark_y_number:u32)->Result<BaseImage,String>{
+    pub fn embed_image(&self,watermark: Watermark,x_point:u32,y_point:u32,watermark_x_number:u32,watermark_y_number:u32,embed_bit:u8)->Result<BaseImage,String>{
         let host_image = self.base_image.clone();
         let mut image = host_image.dyamic_image.to_rgba8();
         let embed_width = watermark.width*watermark_x_number;
@@ -73,12 +73,29 @@ impl HostImage{
                     Some(pixel) => pixel,
                     None => return Err("Host pixel not found".to_string())
                 };
-                let result_r = host_pixel.r ^ watermark_pixel.r;
-                let result_g = host_pixel.g ^ watermark_pixel.g;
-                let result_b = host_pixel.b ^ watermark_pixel.b;
+                let mut embed_pixel = 0;
+                if watermark_pixel.r == 255 && watermark_pixel.g == 255 && watermark_pixel.b == 255{
+                    embed_pixel = 1 ;
+                }
+                embed_pixel =  embed_pixel <<embed_bit;
+                let result_r = if embed_pixel == 0{
+                    host_pixel.r&embed_pixel
+                }else {
+                    host_pixel.r|embed_pixel
+                };
+                let result_g = if embed_pixel == 0{
+                    host_pixel.g&embed_pixel
+                }else {
+                    host_pixel.g|embed_pixel
+                };
+                let result_b = if embed_pixel == 0{
+                    host_pixel.b&embed_pixel
+                }else {
+                    host_pixel.b|embed_pixel
+                };
 
-                image.put_pixel(x, y, Rgba([result_r,result_g,result_b,255]));
-            
+                image.put_pixel(x, y, Rgba([result_r,result_g,result_b,host_pixel.a]));
+
             }
         }
 

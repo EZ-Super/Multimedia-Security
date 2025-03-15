@@ -1,4 +1,5 @@
 use image::ColorType;
+use modules::embed_watermark::Watermark;
 use std::env;
 
 
@@ -29,8 +30,9 @@ fn main() {
 
 
     let mut new_image = embed_watermark::HostImage::new(image);
+    let watermark = Watermark::new(&nfu);
 
-    //new_image.embed_image(nfu, 0, 0, watermark_x_number, watermark_y_number)
+    new_image.embed_image(nfu, 0, 0, 1, 1, 1);
  
 
 
