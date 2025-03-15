@@ -6,6 +6,8 @@ use crate::modules::point::Point;
 
 use super::point;
 
+
+#[derive(Clone)]
 #[allow(dead_code)]
 pub struct BaseImage{
     path : String,
@@ -13,7 +15,7 @@ pub struct BaseImage{
     pub height : u32,
     pub pixel: HashMap<Point,point::RGPPixel>,
     color_type:image::ColorType,
-    dyamic_image: image::DynamicImage,
+    pub dyamic_image: image::DynamicImage,
 }
 
 impl BaseImage{
