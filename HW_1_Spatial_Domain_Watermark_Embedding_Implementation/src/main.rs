@@ -7,6 +7,7 @@ use std::env;
 mod modules;
 use modules::get_image;
 use modules::embed_watermark;
+use modules::note;
 
 fn main() {
     dotenvy::dotenv().expect("Failed to read .env file");
@@ -31,9 +32,24 @@ fn main() {
 
     let mut new_image = embed_watermark::HostImage::new(image);
     let watermark = Watermark::new(&nfu);
+    let _ = new_image.embed_image(watermark.clone(),  1, 1, 0);
+    let _ = new_image.embed_image(watermark.clone(),  1, 1, 0);
+    let _ = new_image.embed_image(watermark.clone(),  1, 1, 1);
+    let _ = new_image.embed_image(watermark.clone(),  1, 1, 2);
+    let _ = new_image.embed_image(watermark.clone(),  1, 1, 3);
+    let _ = new_image.embed_image(watermark.clone(),  1, 1, 4);
+    let _ = new_image.embed_image(watermark.clone(),  1, 1, 5);
+    let _ = new_image.embed_image(watermark.clone(),  1, 1, 6);
+    let _ = new_image.embed_image(watermark.clone(), 1, 1, 7);
 
-    new_image.embed_image(nfu, 0, 0, 1, 1, 1);
- 
+    let _ = new_image.embed_image(watermark.clone(),  2, 1, 0);
+    let _ = new_image.embed_image(watermark.clone(),  2, 1, 1);
+    let _ = new_image.embed_image(watermark.clone(),  2, 1, 2);
+    let _ = new_image.embed_image(watermark.clone(),  2, 1, 3);
+    let _ = new_image.embed_image(watermark.clone(),  2, 1, 4);
+    let _ = new_image.embed_image(watermark.clone(),  2, 1, 5);
+    let _ = new_image.embed_image(watermark.clone(),  2, 1, 6);
+    let _ = new_image.embed_image(watermark.clone(),  2, 1, 7);
 
 
 

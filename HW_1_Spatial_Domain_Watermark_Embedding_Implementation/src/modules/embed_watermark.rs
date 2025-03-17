@@ -1,3 +1,4 @@
+use image::ImageBuffer;
 use image::Rgba;
 
 use crate::modules::get_image::BaseImage;
@@ -6,6 +7,7 @@ use crate::modules::point::Point;
 
 use std::collections::HashMap;
 
+#[derive(Clone)]
 pub struct Watermark{
     watermark:BaseImage,
     width:u32,
@@ -20,8 +22,7 @@ pub struct RandomNumber{
 }
 pub struct HostImage{
     base_image:BaseImage,
-    embed_width:u32,
-    embed_height:u32,
+
 }
 
 impl Watermark{
@@ -44,11 +45,9 @@ impl HostImage{
     pub fn new(base_image:BaseImage)->HostImage{
         HostImage{
             base_image,
-            embed_width: 0 as u32,
-            embed_height: 0 as u32,
         }
     }
-    pub fn embed_image(&self,watermark: Watermark,x_point:u32,y_point:u32,watermark_x_number:u32,watermark_y_number:u32,embed_bit:u8)->Result<BaseImage,String>{
+    pub fn embed_image(&self,watermark: Watermark,watermark_x_number:u32,watermark_y_number:u32,embed_bit:u8)->Result<String,String>{
         let host_image = self.base_image.clone();
         let mut image = host_image.dyamic_image.to_rgba8();
         let embed_width = watermark.width*watermark_x_number;
@@ -75,36 +74,29 @@ impl HostImage{
                 };
                 let mut embed_pixel = 0;
                 if watermark_pixel.r == 255 && watermark_pixel.g == 255 && watermark_pixel.b == 255{
-                    embed_pixel = 1 ;
+                    embed_pixel = 1 ; //00000001
                 }
                 embed_pixel =  embed_pixel <<embed_bit;
-                let result_r = if embed_pixel == 0{
-                    host_pixel.r&embed_pixel
-                }else {
-                    host_pixel.r|embed_pixel
-                };
-                let result_g = if embed_pixel == 0{
-                    host_pixel.g&embed_pixel
-                }else {
-                    host_pixel.g|embed_pixel
-                };
-                let result_b = if embed_pixel == 0{
-                    host_pixel.b&embed_pixel
-                }else {
-                    host_pixel.b|embed_pixel
-                };
-
+                let result_r = set_bit(host_pixel.r, embed_bit, embed_pixel);
+                let result_g = set_bit(host_pixel.g, embed_bit, embed_pixel);
+                let result_b = set_bit(host_pixel.b, embed_bit, embed_pixel);
+                //println!("host r:{} g:{} b:{}",host_pixel.r,host_pixel.g,host_pixel.b);
+                //println!("result r:{} g:{} b:{}",result_r,result_g,result_b);
                 image.put_pixel(x, y, Rgba([result_r,result_g,result_b,host_pixel.a]));
 
             }
         }
-
-        image.save("embed_image.jpg").expect("Failed to save image");
-
-
-
-
-        Ok(BaseImage::new("".to_string(), image::ColorType::L16))
+        let file_name = format!("result/embed_image {} x {} ({}).png",watermark_x_number,watermark_y_number,embed_bit);
+        image.save(file_name.clone()).expect("Failed to save image");
+        
+        Ok(file_name)
     }
 }
 
+fn set_bit(n: u8, pos: u8,embed_pixel:u8) -> u8 {
+    if embed_pixel == 0{
+        return n & !(1 << pos)
+    }else{
+        return n | (1 << pos)
+    }
+}
