@@ -13,27 +13,29 @@ pub struct BaseImage{
     path : String,
     pub width : u32,
     pub height : u32,
-    pub pixel: HashMap<Point,point::RGPPixel>,
+    pub pixel: HashMap<Point,point::RGBPixel>,
     color_type:image::ColorType,
     pub dyamic_image: image::DynamicImage,
 }
 
 impl BaseImage{
-    pub fn new(path:String,color_type:image::ColorType)->BaseImage{
-        println!("path:{}",path);
+    pub fn new(path:String,color_type:image::ColorType)->Result<BaseImage,String>{
         let image = match open(&path){
             Ok(image) => image,
-            Err(error) => panic!("Error loading image: {}", error)
+            Err(error) => {
+                let error_string = format!("Error loading image:{}",error);
+                Err(error_string)?
+            }
         };
         let (width, height) = image.dimensions();
-        BaseImage{
+        Ok(BaseImage{
             path,
             width,
             height,
             pixel:HashMap::new(),
             color_type,
             dyamic_image:image,
-        }
+        })
 
     }
     pub fn get_pixel(&mut self){
@@ -43,7 +45,7 @@ impl BaseImage{
                 //println!("r:{} g:{} b:{} a:{}",r,g,b,a);
 
                 let point = Point{x,y};
-                let pixel = point::RGPPixel::new(r,g,b,a);
+                let pixel = point::RGBPixel::new(r,g,b,a);
                 self.pixel.insert(point,pixel );
             }
         }

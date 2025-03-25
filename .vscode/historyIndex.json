@@ -7,5 +7,23 @@
     "tags": [
       "gemini"
     ]
+  },
+  "859127b2-23b5-4abb-87b0-a7bd9a059cf6": {
+    "id": "859127b2-23b5-4abb-87b0-a7bd9a059cf6",
+    "title": "thread 'main' panicked at src\\modules\\embed_waterm",
+    "create_time": 1742708799222,
+    "update_time": 1742709261794,
+    "tags": [
+      "gemini"
+    ]
+  },
+  "bd39470f-13bf-487c-becd-0ab2f7c06677": {
+    "id": "bd39470f-13bf-487c-becd-0ab2f7c06677",
+    "title": "you might be missing a string literal to format wi",
+    "create_time": 1742912188928,
+    "update_time": 1742912235584,
+    "tags": [
+      "gemini"
+    ]
   }
 }
