@@ -7,7 +7,7 @@ use crate::modules::point::Point;
 use super::point;
 
 
-#[derive(Clone)]
+#[derive(Clone,Debug)]
 #[allow(dead_code)]
 pub struct BaseImage{
     path : String,

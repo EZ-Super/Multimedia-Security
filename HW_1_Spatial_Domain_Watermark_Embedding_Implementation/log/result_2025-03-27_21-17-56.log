@@ -1,0 +1,7 @@
+[2025-03-27 21:17:56.828313 +08:00] INFO [HW_1_Spatial_Domain_Watermark_Embedding_Implementation] src/main.rs:34: Start watermark embedding
+[2025-03-27 21:17:58.092235 +08:00] INFO [HW_1_Spatial_Domain_Watermark_Embedding_Implementation] src/main.rs:54: random number PSNR 0.5: 46.381403775982164
+[2025-03-27 21:18:00.640566 +08:00] INFO [HW_1_Spatial_Domain_Watermark_Embedding_Implementation] src/main.rs:64: random number PSNR 2.0: 46.36924495241041
+[2025-03-27 21:18:02.280569 +08:00] INFO [HW_1_Spatial_Domain_Watermark_Embedding_Implementation] src/main.rs:88: 1x1_3 PSNR: 45.92101919896287
+[2025-03-27 21:18:03.558586 +08:00] INFO [HW_1_Spatial_Domain_Watermark_Embedding_Implementation] src/main.rs:100: 1x1_7 PSNR: 20.743988772058945
+[2025-03-27 21:18:04.852373 +08:00] INFO [HW_1_Spatial_Domain_Watermark_Embedding_Implementation] src/main.rs:112: 2x1_3 PSNR: 42.86885003722102
+[2025-03-27 21:18:06.262951 +08:00] INFO [HW_1_Spatial_Domain_Watermark_Embedding_Implementation] src/main.rs:123: 2x1_7 PSNR: 17.74857722499192

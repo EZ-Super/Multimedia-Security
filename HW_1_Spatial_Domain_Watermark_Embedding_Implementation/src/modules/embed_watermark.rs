@@ -73,22 +73,21 @@ impl HostImage{
                     None => return Err("Watermark pixel not found".to_string())
                 };
 
-                let host_pixel = match host_image.pixel.get(&Point{x:x,y:y}){
+                let host_pixel = match host_image.pixel.get(&Point{x,y}){
                     Some(pixel) => pixel,
                     None => return Err("Host pixel not found".to_string())
                 };
-                let mut rng = rand::rng();
-                let mut random_number = rng.random_range(0..2);
+                let mut embed_pixel = 0;
                 if watermark_pixel.r == 255 && watermark_pixel.g == 255 && watermark_pixel.b == 255{
-                    random_number = 1 ; //00000001
+                    embed_pixel = 1 ; //00000001
                 }
-                random_number =  random_number <<embed_bit;
-                let result_r = set_bit(host_pixel.r, embed_bit, random_number);
-                let result_g = set_bit(host_pixel.g, embed_bit, random_number);
-                let result_b = set_bit(host_pixel.b, embed_bit, random_number);
+                embed_pixel =  embed_pixel <<embed_bit;
+
+                let result_r = set_bit(host_pixel.r, embed_bit, embed_pixel);
+                let result_g = set_bit(host_pixel.g, embed_bit, embed_pixel);
+                let result_b = set_bit(host_pixel.b, embed_bit, embed_pixel);
 
                 image.put_pixel(x, y, Rgba([result_r,result_g,result_b,host_pixel.a]));
-
             }
         }
         let file_name = format!("result/embed_image {} x {} ({}).png",watermark_x_number,watermark_y_number,embed_bit);
@@ -115,12 +114,10 @@ impl HostImage{
                     Some(pixel) => pixel,
                     None => &Rgba([0,0,0,255])
                 };
-                let mut embed_pixel = 0;
-                if embed_pixel == 1{
-                    embed_pixel = 1 ; 
-                }
-                let [r,g,b,a] = host_pixel.0;
 
+                let mut rng = rand::rng();
+                let mut embed_pixel = rng.random_range(0..2);
+                let [r,g,b,a] = host_pixel.0;
                 embed_pixel =  embed_pixel <<embed_bit;
 
                 let result_r = set_bit(r, embed_bit as u8, embed_pixel as u8);
