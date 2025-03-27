@@ -5,8 +5,7 @@ use modules::embed_watermark::Watermark;
 use std::env;
 use log::{info,warn,error};
 use flexi_logger::Logger;
-use std::fs::File;
-use std::io::Write;
+
 
 
 mod modules;
@@ -121,8 +120,7 @@ fn main() {
     let embedded_2x1_7_psnr = format!("2x1_7 PSNR: {}",psnr_2x2_7.calculate_psnr().get_psnr());
     println!("{}",embedded_2x1_7_psnr);
     info!("{}",embedded_2x1_7_psnr);
-     
-
+    
     logger.flush();
 
 

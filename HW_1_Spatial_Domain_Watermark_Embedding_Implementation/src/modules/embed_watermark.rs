@@ -115,6 +115,11 @@ impl HostImage{
                     None => &Rgba([0,0,0,255])
                 };
 
+                if x > host_image.width * random_number.scale as u32 || y > host_image.height * random_number.scale as u32{
+                    new_image.put_pixel(point_x, point_y, host_pixel.clone());
+                    continue;
+                }
+                
                 let mut rng = rand::rng();
                 let mut embed_pixel = rng.random_range(0..2);
                 let [r,g,b,a] = host_pixel.0;

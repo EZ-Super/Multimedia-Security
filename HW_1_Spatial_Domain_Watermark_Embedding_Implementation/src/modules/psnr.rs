@@ -1,7 +1,7 @@
 use image::Rgba;
 use log::info;
 
-use crate::modules::note;
+
 use crate::modules::get_image::BaseImage;
 use crate::modules::point::Point;
 
