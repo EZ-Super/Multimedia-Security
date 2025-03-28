@@ -30,29 +30,20 @@ impl PSNR{
         let hegiht = if host_pixel.height > water_pixel.height{host_pixel.height} else {water_pixel.height};
         let width = if host_pixel.width > water_pixel.width{host_pixel.width} else {water_pixel.width};
         //println!("height:{} width:{}",hegiht,width);
-
-    
         for x in 0..hegiht{
             for y in 0..width{
-                
                 let host_pixel = host_pixel.pixel.get(&Point { x, y});
                 let embedded_pixel = water_pixel.pixel.get(&Point { x, y});
-                
-
+            
                 let [hr,hg,hb,_] = match host_pixel{
                     Some(pixel) => pixel.get_rgb(),
                     None => [0,0,0,255],
                 };
-
-
-
-
                 let [er,eg,eb,_] = match embedded_pixel{
                     Some(pixel) => pixel.get_rgb(),
                     None => [0,0,0,255],
                 };
 
-                
                 let diff_r = (hr as i32 - er as i32).pow(2);
                 let diff_g = (hg as i32 - eg as i32).pow(2);
                 let diff_b = (hb as i32 - eb as i32).pow(2);
@@ -61,10 +52,7 @@ impl PSNR{
                 self.mse += diff_g as f64;
                 self.mse += diff_b as f64; 
             }
-        }
-         
-
-      
+        }      
         let height_width = hegiht * width;
         self.mse = self.mse / (height_width as f64);
         self.psnr = 10.0 * (self.max.powi(2) / self.mse).log10();
