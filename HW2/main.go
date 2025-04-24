@@ -26,11 +26,6 @@ func main(){
 	LL,LH,HL,HH := imageToDWT.DWT2D(matrix)
 
 	PLL,pLH,pHL,pHH := imageToDWT.DWT2D(pictureMatrix)
-	//fmt.Print("LL: ", LL)
-	//fmt.Print("LH: ", LH)
-	//fmt.Print("HL: ", HL)
-	//fmt.Print("HH: ", HH)
-
 
 	outImage := imageToDWT.CombinDWTBandsToImage(LL,LH,HL,HH)
 	file ,_ := os.Create("dwt_result.png")
@@ -43,15 +38,8 @@ func main(){
 	defer file.Close()
 	bmp.Encode(file,pout)
 
-
-
-
 	reconstructed := imageToDWT.IDWT2D(LL,LH,HL,HH)
-
-
 	imageToDWT.SaveMatrixAsImage(reconstructed,"reconstructed.png")
-
-
 
 	
 
