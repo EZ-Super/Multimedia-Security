@@ -1,4 +1,4 @@
-time="2025-05-03T15:15:28+08:00" level=info msg="Start program"
-time="2025-05-03T15:15:28+08:00" level=info msg="psnr: 28.683906 \n"
-time="2025-05-03T15:15:29+08:00" level=info msg="Rotated NC : 0.969878"
-time="2025-05-03T15:15:29+08:00" level=info msg="Rotated NC : 0.856003"
+time="2025-05-03T15:26:35+08:00" level=info msg="Start program"
+time="2025-05-03T15:26:35+08:00" level=info msg="psnr: 27.713363 \n"
+time="2025-05-03T15:26:36+08:00" level=info msg="Rotated NC : 0.967167"
+time="2025-05-03T15:26:36+08:00" level=info msg="Rotated NC : 0.954738"
