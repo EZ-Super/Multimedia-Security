@@ -32,7 +32,7 @@ func main(){
 	
 
 	
-	waterMark ,err := imageToDWT.ImageToMatrix("./resource/picture 64.png")
+	waterMark ,err := imageToDWT.ImageToMatrix("./resource/123a.png")
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
