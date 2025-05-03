@@ -32,7 +32,7 @@ func main(){
 	
 
 	
-	waterMark ,err := imageToDWT.ImageToMatrix("./resource/picture64X64.png")
+	waterMark ,err := imageToDWT.ImageToMatrix("./resource/picture 64.png")
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
@@ -125,7 +125,7 @@ func main(){
 	cropWMImg := imageToDWT.MatrixToImage(cropWM)
 	imageToDWT.SaveImage(cropWMImg,"./result/elaine_512x512_watermark_crop_wmHL.png")
 
-	log.Info(fmt.Sprintf("Rotated NC : %f",imageToDWT.CalcNC(waterMark,cropWM)))
+	log.Info(fmt.Sprintf("crop NC : %f",imageToDWT.CalcNC(waterMark,cropWM)))
 
 
 }
