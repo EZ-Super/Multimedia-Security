@@ -49,3 +49,14 @@ func IDWT2D(LL, LH, HL, HH [][]float64) [][]float64 {
 
 	return result
 }
+
+func IDWT3D(
+    LL3, HL3, LH3, HH3 [][]float64,
+    HL2, LH2, HH2 [][]float64,
+    HL1, LH1, HH1 [][]float64,
+) [][]float64 {
+    LL2 := IDWT2D(LL3, LH3,HL3, HH3)
+    LL1 := IDWT2D(LL2, LH2, HL2, HH2)
+    restored := IDWT2D(LL1, LH1, HL1, HH1)
+    return restored
+}

@@ -2,11 +2,11 @@ package imageToDWT
 
 import (
 	"fmt"
-
+    "image/draw"
 	"image/png"
 	"image"
-	"image/color"
 	"os"
+	//"math"
 )
 
 
@@ -46,28 +46,21 @@ func ImageToMatrix(path string) ([][]float64,error) {
 }	
 
 
-func SaveMatrixAsImage(matrix [][]float64, path string) error {
-	h := len(matrix)
-	w := len(matrix[0])
-	img := image.NewGray(image.Rect(0, 0, w, h))
+// 將任意 image.Image 轉換成 image.Gray（灰階格式）
+func ToGray(img image.Image) *image.Gray {
+    bounds := img.Bounds()
+    gray := image.NewGray(bounds)
+    draw.Draw(gray, bounds, img, bounds.Min, draw.Src)
+    return gray
+}
 
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
-			val := matrix[y][x]
-			if val < 0 {
-				val = 0
-			}
-			if val > 255 {
-				val = 255
-			}
-			img.SetGray(x, y, color.Gray{Y: uint8(val)})
-		}
-	}
 
-	out, err := os.Create(path)
-	if err != nil {
-		return err
-	}
-	defer out.Close()
-	return png.Encode(out, img)
+// 輔助函數：保存灰階圖像文件（根據副檔名判斷格式）
+func SaveImage(img *image.Gray, filename string) {
+    file, err := os.Create(filename)
+    if err != nil { panic(err) }
+    defer file.Close()
+
+    png.Encode(file, img)
+
 }
