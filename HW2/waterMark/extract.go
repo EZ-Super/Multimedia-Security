@@ -21,16 +21,8 @@ func ExtractWaterMarkBand(
 
 		for x:=0;x<64;x++{
 			wmLL[y][x] = (DWTImage.LL3[y][x] - alpha[1]*original.LL3[y][x]) / beta[1]
-
-			
-
 		}
 	}
-
-
-
-
-
 	return wmLL
 }
 

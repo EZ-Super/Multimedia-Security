@@ -88,7 +88,7 @@ func main(){
 	embedDW3 := imageToDWT.DWT3Level(result)
 	wmHL :=watermark.ExtractWaterMarkBand(embedDW3,*originalDW3,alpha,beta)
 
-
+	log.Info(fmt.Sprintf("waternc NC : %f",imageToDWT.CalcNC(waterMark,wmHL)))
 
 	wmHLImg := imageToDWT.MatrixToImage(wmHL)
 	imageToDWT.SaveImage(wmHLImg,"./result/elaine_512x512_watermark_wmHL.png")
