@@ -16,6 +16,9 @@ const (
 	mu        = 3.99 // 混沌參數 μ
 )
 
+var ClassCodeCount = map[uint8]int{0b00:0 , 0b01:0 , 0b10:0 , 0b11: 0}
+
+
 // Logistic Map 混沌排序產生器
 func logisticSequence(x0 float64, total int) []int {
 
@@ -181,14 +184,12 @@ func main() {
 				block[y*blockSize+x] = grayCover.GrayAt(bx+x, by+y).Y
 			}
 		}
-
 		remainingBits := secretBits[bitIndex:] //把剩餘的秘密資料傳入 processBlock() 嘗試嵌入
 		modified, usedBits, classCode := processBlock(block, remainingBits) // 嘗試嵌入
+		ClassCodeCount[classCode]++
 		bitIndex += (8 * (len(modified) - 1)) / usedBits // 更新 bitIndex 以指向下一個未嵌入的秘密位元
-
 		// 藏入類別碼
 		modified[4] = embedLSB(modified[4], classCode, 2) // 將類別碼嵌入到中心像素
-
 		// 寫入回主圖
 		for y := 0; y < blockSize; y++ {
 			for x := 0; x < blockSize; x++ {
@@ -196,10 +197,51 @@ func main() {
 			}
 		}
 	}
-
+	PSNR := computePSNR(grayCover, out)
 	err = imaging.Save(out, "stego_output.png")
 	if err != nil {
 		log.Fatal("無法儲存結果圖片:", err)
 	}
 	fmt.Println("✅ 藏圖完成，結果為 stego_output.png")
+	fmt.Printf("PSNR: %f\n", PSNR)
+
+	fmt.Println("ClassCodeCount:", ClassCodeCount)
+	fmt.Println("ClassCodeCount[0b00]:", ClassCodeCount[0b00])
+	fmt.Println("ClassCodeCount[0b01]:", ClassCodeCount[0b01])
+	fmt.Println("ClassCodeCount[0b10]:", ClassCodeCount[0b10])
+	fmt.Println("ClassCodeCount[0b11]:", ClassCodeCount[0b11])
+	fmt.Printf("總藏入量: %d\n", ClassCodeCount[0b00]*2 + ClassCodeCount[0b01]*3 + ClassCodeCount[0b10]*4 + ClassCodeCount[0b11]*5)
+}
+
+
+
+// 計算 MSE（Mean Squared Error）
+func computeMSE(img1, img2 *image.Gray) float64 {
+	bounds1 := img1.Bounds()
+	bounds2 := img2.Bounds()
+
+	if bounds1.Dx() != bounds2.Dx() || bounds1.Dy() != bounds2.Dy() {
+		panic("圖片尺寸不一致，無法計算 MSE")
+	}
+
+	var sum float64
+	for y := 0; y < bounds1.Dy(); y++ {
+		for x := 0; x < bounds1.Dx(); x++ {
+			v1 := float64(img1.GrayAt(x, y).Y)
+			v2 := float64(img2.GrayAt(x, y).Y)
+			diff := v1 - v2
+			sum += diff * diff
+		}
+	}
+	total := float64(bounds1.Dx() * bounds1.Dy())
+	return sum / total
+}
+
+// 計算 PSNR（Peak Signal-to-Noise Ratio）
+func computePSNR(img1, img2 *image.Gray) float64 {
+	mse := computeMSE(img1, img2)
+	if mse == 0 {
+		return math.Inf(1) // 完全一樣，PSNR 無限大
+	}
+	return 10 * math.Log10((255 * 255) / mse)
 }
