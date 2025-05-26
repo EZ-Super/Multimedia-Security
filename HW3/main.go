@@ -29,6 +29,9 @@ type PixelState struct {
 
 var ClassCodeCount = map[uint8]int{0b00: 0, 0b01: 0, 0b10: 0, 0b11: 0}
 
+
+
+
 // Logistic Map 混沌排序產生器
 func logisticSequence(x0 float64, total int) []int {
 
@@ -318,6 +321,7 @@ func main() {
 			}
 		}
 
+
 		log.Printf("bx,by: %d,%d", bx, by)
 		log.Printf("top,bottom,left,right: %d,%d,%d,%d", top.x, bottom.x, left.x, right.x)
 		log.Printf("top.y,bottom.y,left.y,right.y: %d,%d,%d,%d", top.y, bottom.y, left.y, right.y)
@@ -351,6 +355,7 @@ func main() {
 			value: embedLSB(modified[6].value, classCode, 2),
 			valid: true,
 		}
+
 		// 寫入回主圖
 
 		if modified[0].valid {
@@ -383,10 +388,12 @@ func main() {
 		}
 	}
 
+
 	PSNR := computePSNR(grayCover, out)
 	cropImage := imaging.CropCenter(out, 512, 512)
 
 	err = imaging.Save(cropImage, "stego_output.png")
+
 	if err != nil {
 		log.Fatal("無法儲存結果圖片:", err)
 	}
@@ -398,6 +405,7 @@ func main() {
 	fmt.Println("ClassCodeCount[0b01]:", ClassCodeCount[0b01])
 	fmt.Println("ClassCodeCount[0b10]:", ClassCodeCount[0b10])
 	fmt.Println("ClassCodeCount[0b11]:", ClassCodeCount[0b11])
+
 	fmt.Printf("總藏入量: %d\n", ClassCodeCount[0b00]*2+ClassCodeCount[0b01]*3+ClassCodeCount[0b10]*4+ClassCodeCount[0b11]*5)
 
 	logger.Println("執行完成")
@@ -433,4 +441,38 @@ func computePSNR(img1, img2 *image.Gray) float64 {
 		return math.Inf(1) // 完全一樣，PSNR 無限大
 	}
 	return 10 * math.Log10((255*255)/mse)
+}
+
+
+
+
+// 計算 MSE（Mean Squared Error）
+func computeMSE(img1, img2 *image.Gray) float64 {
+	bounds1 := img1.Bounds()
+	bounds2 := img2.Bounds()
+
+	if bounds1.Dx() != bounds2.Dx() || bounds1.Dy() != bounds2.Dy() {
+		panic("圖片尺寸不一致，無法計算 MSE")
+	}
+
+	var sum float64
+	for y := 0; y < bounds1.Dy(); y++ {
+		for x := 0; x < bounds1.Dx(); x++ {
+			v1 := float64(img1.GrayAt(x, y).Y)
+			v2 := float64(img2.GrayAt(x, y).Y)
+			diff := v1 - v2
+			sum += diff * diff
+		}
+	}
+	total := float64(bounds1.Dx() * bounds1.Dy())
+	return sum / total
+}
+
+// 計算 PSNR（Peak Signal-to-Noise Ratio）
+func computePSNR(img1, img2 *image.Gray) float64 {
+	mse := computeMSE(img1, img2)
+	if mse == 0 {
+		return math.Inf(1) // 完全一樣，PSNR 無限大
+	}
+	return 10 * math.Log10((255 * 255) / mse)
 }
